@@ -1,6 +1,3 @@
-/* App-local styles. Mesh chrome (settings drawer, self-ref bar) is provided by
- * @baditaflorin/mesh-common/styles.css imported in main.tsx. */
-
 :root {
   color-scheme: dark;
 }
@@ -22,30 +19,155 @@ body,
   -webkit-tap-highlight-color: transparent;
 }
 
-.feature-placeholder {
-  padding: 6rem 1.5rem 2rem;
-  text-align: center;
+.tfa-screen {
+  padding: 4rem 1rem 5rem;
+  max-width: 32rem;
+  margin: 0 auto;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 1rem;
 }
 
-.feature-placeholder h1 {
-  font-size: 1.6rem;
+.tfa-header {
+  text-align: center;
+}
+
+.tfa-header h1 {
+  margin: 0 0 0.3rem;
+  color: var(--mesh-accent);
+  font-size: 1.5rem;
+}
+
+.tfa-status {
   margin: 0;
+  font-size: 0.78rem;
+  color: var(--mesh-muted);
+}
+
+.tfa-warn {
+  margin: 0.6rem 0 0;
+  font-size: 0.72rem;
+  color: rgba(255, 180, 100, 0.95);
+  background: rgba(255, 180, 100, 0.06);
+  border: 1px solid rgba(255, 180, 100, 0.2);
+  border-radius: 6px;
+  padding: 0.4rem 0.6rem;
+  text-align: left;
+  line-height: 1.4;
+}
+
+.tfa-send {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  gap: 0.5rem;
+}
+
+.tfa-digits {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--mesh-fg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.7rem;
+  font-size: 1.2rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  text-align: center;
+  letter-spacing: 0.1em;
+}
+
+.tfa-label {
+  background: rgba(0, 0, 0, 0.3);
+  color: var(--mesh-fg);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 8px;
+  padding: 0.7rem 0.8rem;
+  font-size: 0.95rem;
+}
+
+.tfa-send button {
+  background: var(--mesh-accent);
+  color: #0b0a06;
+  border: none;
+  padding: 0 1.2rem;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.tfa-send button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.tfa-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.tfa-code {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.tfa-code.is-mine {
+  border-color: rgba(255, 183, 74, 0.4);
+  background: rgba(255, 183, 74, 0.08);
+}
+
+.tfa-code-btn {
+  width: 100%;
+  background: transparent;
+  border: none;
+  color: var(--mesh-fg);
+  padding: 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.tfa-digits-display {
+  font-size: 1.8rem;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  letter-spacing: 0.15em;
+  font-weight: 600;
   color: var(--mesh-accent);
 }
 
-.feature-placeholder p {
-  max-width: 32rem;
-  margin: 0;
-  opacity: 0.85;
-  line-height: 1.5;
+.tfa-code-status {
+  font-size: 0.72rem;
+  color: var(--mesh-muted);
 }
 
-.feature-status {
-  font-size: 0.85rem;
-  opacity: 0.6;
+.tfa-code-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.7rem;
+  padding: 0.4rem 0.9rem 0.6rem;
+  color: var(--mesh-muted);
   font-variant-numeric: tabular-nums;
+}
+
+.tfa-empty {
+  text-align: center;
+  color: var(--mesh-muted);
+  font-style: italic;
+  padding: 2rem 0;
+}
+
+.tfa-clear {
+  align-self: center;
+  background: transparent;
+  color: var(--mesh-muted);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 6px;
+  padding: 0.4rem 1rem;
+  font-size: 0.8rem;
+  cursor: pointer;
 }
