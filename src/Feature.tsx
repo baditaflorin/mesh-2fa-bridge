@@ -27,13 +27,26 @@ export function Feature({ room, config }: Props) {
   const [draft, setDraft] = useState("");
   const [label, setLabel] = useState("");
   const [copiedId, setCopiedId] = useState<string | null>(null);
-  const [, rerender] = useState(0);
+  const [version, rerender] = useState(0);
+
+  // Test-only handle: expose the live Yjs doc so e2e tests can seed a peer's
+  // write (e.g. a code from the "phone") directly into the SAME shared doc
+  // both peers render from. Plain reference — no production behaviour change.
+  useEffect(() => {
+    (window as unknown as { __tfaRoom?: typeof room }).__tfaRoom = room;
+    return () => {
+      delete (window as unknown as { __tfaRoom?: typeof room }).__tfaRoom;
+    };
+  }, [room]);
 
   useEffect(() => {
     if (!room) return;
     const arr = room.doc.getArray<Code>("codes");
     const onChange = () => rerender((n) => n + 1);
     arr.observe(onChange);
+    // Pick up whatever is already in the doc on mount (e.g. codes a peer sent
+    // before this device joined).
+    rerender((n) => n + 1);
     return () => arr.unobserve(onChange);
   }, [room]);
 
@@ -43,13 +56,18 @@ export function Feature({ room, config }: Props) {
     return () => clearInterval(t);
   }, []);
 
+  // Recompute on every Yjs `codes` change. `version` is bumped by the observe
+  // callback (and the 1s TTL tick); without it in the deps this memo caches the
+  // first snapshot and never reflects a code a peer sent — the receiving device
+  // would render "no codes" forever even though the doc synced.
   const codes = useMemo(() => {
     if (!room) return [] as Code[];
     const now = Date.now();
     return [...room.doc.getArray<Code>("codes").toArray()]
       .filter((c) => now - c.ts < TTL_MS)
       .reverse();
-  }, [room]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [room, version]);
 
   if (!room) {
     return (

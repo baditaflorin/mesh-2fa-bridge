@@ -1,7 +1,7 @@
 # mesh-2fa-bridge
 
 [![pages](https://img.shields.io/badge/live-baditaflorin.github.io%2Fmesh-2fa-bridge-ffb74a)](https://baditaflorin.github.io/mesh-2fa-bridge/)
-[![version](https://img.shields.io/badge/version-0.1.0-blue)](https://github.com/baditaflorin/mesh-2fa-bridge/blob/main/package.json)
+[![version](https://img.shields.io/badge/version-0.1.1-blue)](https://github.com/baditaflorin/mesh-2fa-bridge/blob/main/package.json)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
 > Type a 2FA code on your phone, copy it on your laptop in one click — your devices only
