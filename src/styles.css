@@ -140,12 +140,11 @@ button {
   white-space: nowrap;
 }
 
-.relay-room-state-dot {
-  width: 0.44rem;
-  height: 0.44rem;
-  border-radius: 50%;
-  background: #7ee1b8;
-  box-shadow: 0 0 0 0.2rem rgb(126 225 184 / 12%);
+.relay-room-state-mark {
+  color: #8dbaff;
+  font-size: 0.92rem;
+  font-weight: 760;
+  line-height: 1;
 }
 
 .relay-send-panel,

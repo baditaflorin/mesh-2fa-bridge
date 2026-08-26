@@ -14,6 +14,14 @@ describe("Feature (component)", () => {
     expect(heading).toBeInTheDocument();
   });
 
+  it("states the room-visible boundary without claiming an unverifiable device count", () => {
+    const room = createMockRoom();
+    render(<Feature room={room} config={config} />);
+
+    expect(screen.getByLabelText("Room-visible handoff")).toHaveTextContent("Room-visible handoff");
+    expect(screen.queryByText(/\d+ devices? in room/i)).not.toBeInTheDocument();
+  });
+
   it("shows a connecting state when room is null", () => {
     render(<Feature room={null} config={config} />);
     // Most templates show "Connecting…" while the room is null. Apps with a

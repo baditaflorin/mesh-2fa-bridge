@@ -99,7 +99,6 @@ export function Feature({ room, config }: Props) {
       .reverse();
   }, [room, version]);
 
-  const deviceCount = room ? room.peerCount + 1 : 0;
   const canSend = draft.length >= 4;
 
   const send = () => {
@@ -158,14 +157,11 @@ export function Feature({ room, config }: Props) {
             Move a one-time code to a device already in this room, then copy it there in one action.
           </p>
         </div>
-        <div
-          className="relay-room-state"
-          aria-label={`${deviceCount} device${deviceCount === 1 ? "" : "s"} in this room`}
-        >
-          <span className="relay-room-state-dot" aria-hidden="true" />
-          <span>
-            {deviceCount} device{deviceCount === 1 ? "" : "s"} in room
+        <div className="relay-room-state" aria-label="Room-visible handoff">
+          <span className="relay-room-state-mark" aria-hidden="true">
+            ↗
           </span>
+          <span>Room-visible handoff</span>
         </div>
       </section>
 
@@ -248,7 +244,7 @@ export function Feature({ room, config }: Props) {
             <span>Send the first one from this device or another room participant.</span>
           </div>
         ) : (
-          <ul className="tfa-list" aria-label="Current shared one-time codes">
+          <ul className="tfa-list" aria-label="Current room relay history">
             {codes.map((code) => {
               const remaining = remainingSeconds(code);
               const age = Math.max(0, Math.floor((Date.now() - code.ts) / 1_000));
