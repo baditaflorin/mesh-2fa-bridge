@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "app": "mesh-2fa-bridge",
+  "sourceCommit": "0934f2cd8446858ccef8a047df88e88b4bdec61e",
+  "releaseCommit": "0934f2cd8446858ccef8a047df88e88b4bdec61e",
+  "meshCommonCommit": "025f7ff72e50c4b54a3f4a2d8c88f4f600dec78f",
+  "recordedAt": "2026-08-26T20:12:19Z"
+}
