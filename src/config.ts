@@ -2,6 +2,7 @@ import { createMeshConfig } from "@baditaflorin/mesh-common";
 
 export const config = createMeshConfig({
   appName: "mesh-2fa-bridge",
+  breadcrumbs: false,
   displayName: "Code Relay",
   visualProfile: "utility",
   shellLayout: "inset",
