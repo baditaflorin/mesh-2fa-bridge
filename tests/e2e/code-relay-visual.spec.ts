@@ -53,7 +53,11 @@ test("accessibility contract — the handoff form, room state, and shared-data b
   await expect(page.getByLabel("One-time code")).toBeVisible();
   await expect(page.getByLabel(/label \(optional\)/i)).toBeVisible();
   await expect(page.getByRole("button", { name: "Send code to room" })).toBeDisabled();
-  await expect(page.locator(".relay-room-state")).toHaveAttribute("aria-label", /device.*room/i);
+  await expect(page.locator(".relay-room-state")).toHaveAttribute(
+    "aria-label",
+    "Room-visible handoff",
+  );
+  await expect(page.locator(".relay-room-state")).toContainText("Room-visible handoff");
   await expect(
     page.getByText("This is a shared room feed: every participant can view a sent code."),
   ).toBeVisible();
