@@ -13,7 +13,9 @@ steps:
       - npx playwright install --with-deps chromium
       - npm run fmt:check
       - npm run typecheck
-      - npm run test:unit
       - npm run build
       - npm run smoke
-      - npm run test:e2e
+      - CI=true npm run test
+      - CI=true PLAYWRIGHT_PORT=4175 MESH_LEAK_DURATION_MS=5000 MESH_LEAK_NOISE_OPS=24 npm run test:leak
+      - CI=true PLAYWRIGHT_PORT=4176 npm run audit:security
+      - npm audit --audit-level=high

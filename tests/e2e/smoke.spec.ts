@@ -7,18 +7,17 @@ import { captureConsoleErrors } from "@baditaflorin/mesh-common/testing";
  * console errors.
  */
 
-test("page loads with version + source + tip visible", async ({ page }) => {
+test("page loads with modern room controls and the handoff action visible", async ({ page }) => {
   const c = captureConsoleErrors(page);
   await page.goto("./");
 
-  // Self-ref bar contains a "source" link, a "tip" link, and a version stamp.
-  await expect(page.getByRole("link", { name: /source/i }).first()).toBeVisible();
-  await expect(page.getByRole("link", { name: /tip/i }).first()).toBeVisible();
-  // Version stamp lives in the self-ref bar — mesh-common's class is
-  // `.mesh-self-ref`, legacy apps use `.self-ref`. Both render a `vN.N.N`
-  // string in that footer.
-  const versionLocator = page.locator(".mesh-self-ref, .self-ref").getByText(/^v\d/);
-  await expect(versionLocator.first()).toBeVisible();
+  // Code Relay deliberately uses the modern inset app bar rather than the
+  // legacy footer chrome. The shared controls and actual handoff action must
+  // both be visible on first load.
+  await expect(page.locator("[data-mesh-app-shell]")).toBeVisible();
+  await expect(page.getByRole("button", { name: /invite people to code relay/i })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Open settings" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Send code to room" })).toBeVisible();
 
   // Allow a moment for async TURN fetch / WebRTC handshake; benign warnings
   // about TURN unreachable are OK, but real errors are not.

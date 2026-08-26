@@ -1,10 +1,10 @@
-# mesh-2fa-bridge
+# Code Relay
 
 [![pages](https://img.shields.io/badge/live-baditaflorin.github.io%2Fmesh-2fa-bridge-ffb74a)](https://baditaflorin.github.io/mesh-2fa-bridge/)
 [![version](https://img.shields.io/badge/version-0.1.1-blue)](https://github.com/baditaflorin/mesh-2fa-bridge/blob/main/package.json)
 [![license](https://img.shields.io/badge/license-MIT-green)](./LICENSE)
 
-> Type a 2FA code on your phone, copy it on your laptop in one click — your devices only
+> A short-lived one-time-code handoff for people already in the same shared room.
 
 Live: **https://baditaflorin.github.io/mesh-2fa-bridge/**
 
@@ -16,7 +16,9 @@ Tip the dev: **https://www.paypal.com/paypalme/florinbadita**
 
 ## What it is
 
-Peer-to-peer browser app, no backend of its own beyond the self-hosted WebRTC stack listed below. Built on `@baditaflorin/mesh-common`, hosted on GitHub Pages from `docs/`.
+Code Relay is a peer-to-peer browser companion for moving a one-time code between devices already joined to the same room. It has no app backend of its own beyond the self-hosted WebRTC stack listed below, is built on `@baditaflorin/mesh-common`, and is hosted on GitHub Pages from `docs/`.
+
+It is deliberately **not** a private vault or direct-message channel. A sent code is replicated into the shared room and can be viewed by every room participant. Connected peers prune it from the shared Yjs array after 90 seconds, but the app cannot retract a code someone has copied, photographed, or inspected. Use a room you control and never send passwords, recovery codes, or long-lived secrets.
 
 ## Quickstart (local)
 
@@ -24,7 +26,7 @@ Peer-to-peer browser app, no backend of its own beyond the self-hosted WebRTC st
 git clone https://github.com/baditaflorin/mesh-common
 git clone https://github.com/baditaflorin/mesh-2fa-bridge
 cd mesh-2fa-bridge
-npm install
+npm ci
 npm run dev
 ```
 
@@ -60,6 +62,19 @@ npm run smoke   # build + sanity-check docs/
 ## Privacy
 
 See `docs/privacy.md` for the threat model — what other peers in the mesh see, what the self-hosted infra sees, what stays local.
+
+## Verification
+
+```bash
+npm run fmt:check
+npm run typecheck
+npm run smoke
+npm run test:e2e
+MESH_LEAK_DURATION_MS=5000 MESH_LEAK_NOISE_OPS=24 npm run test:leak
+npm run audit:security
+```
+
+`npm run audit:security` writes a machine-readable `docs/security-audit.json` and a readable `docs/security-audit.md` for the published app.
 
 ## License
 
