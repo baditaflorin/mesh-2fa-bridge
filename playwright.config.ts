@@ -12,6 +12,9 @@ export default defineConfig({
   testDir: "./tests/e2e",
   timeout: 30_000,
   expect: { timeout: 5_000 },
+  // The shared-room specs intentionally exercise one BroadcastChannel mesh
+  // at a time. Serial execution avoids cross-test local transport contention.
+  workers: 1,
   fullyParallel: false,
   reporter: process.env["CI"] ? "list" : [["list"], ["json", { outputFile: "test-results.json" }]],
   use: {

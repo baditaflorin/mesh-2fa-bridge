@@ -18,13 +18,14 @@ const storagePrefix = pkg.name;
 test("two peers in the same room can both load", async ({ browser, baseURL }) => {
   const { a, b, cleanup } = await openTwoPeers(browser, baseURL ?? "", { storagePrefix });
   try {
-    await expect(a.locator(".mesh-self-ref")).toBeVisible();
-    await expect(b.locator(".mesh-self-ref")).toBeVisible();
-    // Both should reach a non-loading state within the timeout — most apps
-    // either show a count, a heading, or a primary control. We assert that
-    // at least one <h1> is present on both pages.
-    await expect(a.getByRole("heading", { level: 1 }).first()).toBeVisible();
-    await expect(b.getByRole("heading", { level: 1 }).first()).toBeVisible();
+    // Code Relay opts into the modern inset shell, whose visible shared
+    // controls live in the app bar rather than the legacy self-ref footer.
+    await expect(a.locator("[data-mesh-app-shell]")).toBeVisible();
+    await expect(b.locator("[data-mesh-app-shell]")).toBeVisible();
+    await expect(a.getByRole("button", { name: /invite people to code relay/i })).toBeVisible();
+    await expect(b.getByRole("button", { name: /invite people to code relay/i })).toBeVisible();
+    await expect(a.getByRole("heading", { name: "Code Relay", level: 1 })).toBeVisible();
+    await expect(b.getByRole("heading", { name: "Code Relay", level: 1 })).toBeVisible();
   } finally {
     await cleanup();
   }

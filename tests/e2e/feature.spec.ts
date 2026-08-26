@@ -9,7 +9,7 @@ const storagePrefix = pkg.name;
 
 /**
  * Load-bearing two-browser proof for the advertised core action:
- *   "Type a 2FA code on your phone, copy it on your laptop in one click."
+ *   "Send a short-lived code to the room; copy it on the other device."
  *
  * Peer A (the "phone") sends a code; peer B (the "laptop") must render that
  * exact code with a copy control. These open two pages in one browser context
@@ -25,16 +25,17 @@ test("a code typed on peer A is displayed with a copy control on peer B", async 
   const { a, b, cleanup } = await openTwoPeers(browser, baseURL ?? "", { storagePrefix });
   try {
     // Peer A ("phone"): type the code and send it.
-    await a.locator(".tfa-digits").fill(PHONE_CODE);
-    await a.getByRole("button", { name: /^send$/i }).click();
+    await a.getByLabel("One-time code").fill(PHONE_CODE);
+    await a.getByRole("button", { name: "Send code to room" }).click();
 
     // Peer B ("laptop"): the exact code surfaces, formatted "428 913", inside a
     // copy control (the whole .tfa-code-btn is the one-click copy affordance).
     const copyBtn = b.locator(".tfa-code .tfa-code-btn");
     await expect(copyBtn).toHaveCount(1);
     await expect(copyBtn.locator(".tfa-digits-display")).toHaveText("428 913");
-    // The control advertises the copy action.
-    await expect(copyBtn.locator(".tfa-code-status")).toHaveText(/tap to copy/i);
+    // The control advertises the copy action and retains the source boundary.
+    await expect(copyBtn.locator(".tfa-code-status")).toHaveText(/copy to this device/i);
+    await expect(b.locator(".tfa-code .tfa-code-meta")).toContainText("Received from device");
 
     // And it is a real <button> the user can click (the one-click copy).
     await expect(copyBtn).toBeEnabled();
@@ -91,7 +92,7 @@ test("codes are scoped to the room — a code in another room never reaches peer
   }
 });
 
-test("an expired code (older than the 90s TTL) is not rendered on peer B", async ({
+test("an expired code (older than the 90s TTL) is pruned from the shared room", async ({
   browser,
   baseURL,
 }) => {
@@ -128,10 +129,35 @@ test("an expired code (older than the 90s TTL) is not rendered on peer B", async
 
     // The fresh code renders…
     await expect(b.locator(".tfa-code .tfa-digits-display")).toHaveText("333 444");
-    // …and the stale one is filtered out: exactly one code shown, and none of
-    // them carry the expired digits.
+    // …and the stale one is never rendered: exactly one code shown, and none
+    // of them carry the expired digits.
     await expect(b.locator(".tfa-code")).toHaveCount(1);
     await expect(b.locator(".tfa-digits-display", { hasText: "111 222" })).toHaveCount(0);
+
+    // More importantly, expiry is not only a visual filter: a live room peer
+    // removes stale entries from the Yjs array so old code digits do not remain
+    // in shared app state after the countdown boundary.
+    await expect
+      .poll(() =>
+        b.evaluate(() => {
+          const room = (
+            window as unknown as {
+              __tfaRoom?: { doc: { getArray: (key: string) => { toArray: () => unknown[] } } };
+            }
+          ).__tfaRoom;
+          return room?.doc
+            .getArray("codes")
+            .toArray()
+            .some(
+              (code) =>
+                typeof code === "object" &&
+                code !== null &&
+                "digits" in code &&
+                code.digits === "111222",
+            );
+        }),
+      )
+      .toBe(false);
   } finally {
     await cleanup();
   }
