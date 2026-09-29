@@ -40,20 +40,23 @@
     "yjs": "^13.6.27"
   },
   "devDependencies": {
+    "@playwright/test": "1.60.0",
+    "@testing-library/jest-dom": "^6.6.0",
+    "@testing-library/react": "^16.1.0",
     "@types/node": "^22.10.0",
     "@types/react": "^19.2.6",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.1.0",
+    "jsdom": "^29.0.1",
     "prettier": "^3.7.4",
     "typescript": "^5.9.3",
     "vite": "^8.2.2",
-    "@playwright/test": "1.60.0",
-    "@testing-library/jest-dom": "^6.6.0",
-    "@testing-library/react": "^16.1.0",
-    "jsdom": "^29.0.1",
     "vitest": "^4.1.11"
   },
   "engines": {
     "node": ">=22"
+  },
+  "overrides": {
+    "undici": "7.29.1"
   }
 }
